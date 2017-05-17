@@ -1,10 +1,12 @@
 @import "base/extends";
 @import "base/animations";
 @import "base/forms";
+@import "base/tables";
 
 @import "module/Loading";
 @import "module/Login";
 @import "module/PageHeader";
 @import "module/Signup";
+@import "module/Users";
 
 @import "state/Navbar";
