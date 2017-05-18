@@ -1,6 +1,6 @@
 #### Tutorial: Managing Users with React
 
-In this tutorial, we'll learn how to manage
+In this tutorial, we'll learn how to manage users in Meteor with a React-based interface. We'll learn about inviting users, helping those users to accept invitations, and managing the roles of users signed up for our application.
 
 [Read this tutorial on The Meteor Chef](https://themeteorchef.com/tutorials/managing-users-with-react)  
 
