@@ -1,15 +1,47 @@
+/* eslint-disable no-underscore-dangle */
+
 import React, { PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Row, Col, Alert, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
+import { Accounts } from 'meteor/accounts-base';
+import { Bert } from 'meteor/themeteorchef:bert';
 import container from '../../modules/container';
 import Invitations from '../../api/invitations/invitations';
 
 class AcceptInvitation extends React.Component {
-  constructor(props) {
-    super(props);
-    // this.state = {};
-    // this.thing = this.thing.bind(this);
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const rawPassword = document.querySelector('[name="password"]').value;
+    const userToCreate = {
+      invitationId: document.querySelector('[name="invitationId"]').value,
+      user: {
+        email: document.querySelector('[name="emailAddress"]').value,
+        password: Accounts._hashPassword(rawPassword),
+        profile: {
+          name: {
+            first: document.querySelector('[name="firstName"]').value,
+            last: document.querySelector('[name="lastName"]').value,
+          },
+        },
+      },
+    };
+
+    Meteor.call('invitations.accept', userToCreate, (error) => {
+      if (error) {
+        Bert.alert(error.reason, 'danger');
+      } else {
+        Meteor.loginWithPassword(userToCreate.user.email, rawPassword, (loginError) => {
+          if (loginError) {
+            Bert.alert(loginError.reason, 'danger');
+          } else {
+            browserHistory.push('/documents');
+            Bert.alert('Welcome!', 'success');
+          }
+        });
+      }
+    });
   }
 
   render() {
@@ -19,8 +51,8 @@ class AcceptInvitation extends React.Component {
         <Col xs={ 12 } sm={ 6 } md={ 4 }>
           <h4 className="page-header">Accept Invitation</h4>
           <form
-            ref={ form => (this.signupForm = form) }
-            onSubmit={ this.handleSubmit }
+            ref={form => (this.acceptInvitationForm = form)}
+            onSubmit={this.handleSubmit}
           >
             <Row>
               <Col xs={ 6 } sm={ 6 }>
@@ -69,10 +101,10 @@ class AcceptInvitation extends React.Component {
             <FormGroup>
               <ControlLabel>Invitation Token</ControlLabel>
               <FormControl
-                type="password"
-                ref="password"
-                name="password"
-                placeholder="Password"
+                type="text"
+                ref="invitationId"
+                name="invitationId"
+                placeholder="Invitation Token"
                 defaultValue={invitation._id}
                 disabled
               />

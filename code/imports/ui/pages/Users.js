@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Label } from 'react-bootstrap';
+import { browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Bert } from 'meteor/themeteorchef:bert';
@@ -9,6 +10,11 @@ import container from '../../modules/container';
 import capitalize from '../../modules/capitalize';
 
 class Users extends React.Component {
+  constructor(props) {
+    super(props);
+    this.authorizeAccess = this.authorizeAccess.bind(this);
+  }
+
   checkIfCurrentUser(mappedUserId, currentUserId) {
     return mappedUserId === currentUserId;
   }
@@ -21,6 +27,20 @@ class Users extends React.Component {
         Bert.alert('Role updated!', 'success');
       }
     });
+  }
+
+  authorizeAccess() {
+    if (!Roles.userIsInRole(this.props.currentUser, ['admin', 'manager'])) {
+      browserHistory.push('/documents');
+    }
+  }
+
+  componentDidUpdate() {
+    this.authorizeAccess();
+  }
+
+  componentWillMount() {
+    this.authorizeAccess();
   }
 
   render() {

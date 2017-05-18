@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button, Alert } from 'react-bootstrap';
+import moment from 'moment';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import container from '../../modules/container';
@@ -18,13 +19,15 @@ class Invitations extends React.Component {
 
   revokeInvitation(event, _id) {
     event.preventDefault();
-    Meteor.call('invitations.revoke', _id, (error) => {
-      if (error) {
-        Bert.alert(error.reason, 'danger');
-      } else {
-        Bert.alert('Invitation revoked!', 'success');
-      }
-    });
+    if (confirm('Are you sure? This is permanent.')) {
+      Meteor.call('invitations.revoke', _id, (error) => {
+        if (error) {
+          Bert.alert(error.reason, 'danger');
+        } else {
+          Bert.alert('Invitation revoked!', 'success');
+        }
+      });
+    }
   }
 
   handleCloseModal() {
@@ -33,15 +36,15 @@ class Invitations extends React.Component {
 
   handleSendInvitation(event) {
     event.preventDefault();
-    const sendInvitationModal = document.querySelector('.SendInvitationModal');
 
     Meteor.call('invitations.send', {
-      emailAddress: sendInvitationModal.querySelector('[name="emailAddress"]').value,
-      role: sendInvitationModal.querySelector('[name="role"]').value,
+      emailAddress: document.querySelector('[name="emailAddress"]').value,
+      role: document.querySelector('[name="role"]').value,
     }, (error) => {
       if (error) {
         Bert.alert(error.reason, 'danger');
       } else {
+        this.handleCloseModal();
         Bert.alert('Invitation sent!', 'success');
       }
     });
@@ -74,7 +77,7 @@ class Invitations extends React.Component {
             <tr key={_id}>
               <td className="vertical-align" width="40%">{emailAddress}</td>
               <td className="vertical-align" width="40%">{role}</td>
-              <td className="vertical-align" width="40%">{sent}</td>
+              <td className="vertical-align" width="40%">{moment(sent).format('MMMM Do, YYYY [at] hh:mm a')}</td>
               <td className="vertical-align" width="40%">
                 <Button
                   onClick={event => this.revokeInvitation(event, _id)}

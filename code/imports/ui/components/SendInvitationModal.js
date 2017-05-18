@@ -5,50 +5,41 @@ import { Roles } from 'meteor/alanning:roles';
 import container from '../../modules/container';
 import capitalize from '../../modules/capitalize';
 
-class SendInvitationModal extends React.Component {
-  constructor(props) {
-    super(props);
-    // this.state = {};
-    // this.thing = this.thing.bind(this);
-  }
-
-  render() {
-    const { show, onClose, onSubmit, applicationRoles } = this.props;
-    return (<div className="SendInvitationModal">
-      <Modal show={show} onHide={onClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Send an Invitation</Modal.Title>
-        </Modal.Header>
-        <form onSubmit={onSubmit}>
-          <Modal.Body>
-            <FormGroup>
-              <ControlLabel>Email Address</ControlLabel>
-              <input
-                type="email"
-                name="emailAddress"
-                className="form-control"
-                placeholder="doug@funnie.com"
-              />
-            </FormGroup>
-            <ControlLabel>Role</ControlLabel>
-            <select
+const SendInvitationModal = ({ show, onClose, onSubmit, applicationRoles }) => (
+  <div className="SendInvitationModal">
+    <Modal show={show} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Send an Invitation</Modal.Title>
+      </Modal.Header>
+      <form onSubmit={onSubmit}>
+        <Modal.Body>
+          <FormGroup>
+            <ControlLabel>Email Address</ControlLabel>
+            <input
+              type="email"
+              name="emailAddress"
               className="form-control"
-              name="role"
-            >
-              {applicationRoles.map(({ name }) => (
-                <option key={name} value={name}>{capitalize(name)}</option>
-              ))}
-            </select>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={onClose}>Nevermind</Button>
-            <Button type="submit" bsStyle="success">Send Invitation</Button>
-          </Modal.Footer>
-        </form>
-      </Modal>
-    </div>);
-  }
-}
+              placeholder="doug@funnie.com"
+            />
+          </FormGroup>
+          <ControlLabel>Role</ControlLabel>
+          <select
+            className="form-control"
+            name="role"
+          >
+            {applicationRoles.map(({ name }) => (
+              <option key={name} value={name}>{capitalize(name)}</option>
+            ))}
+          </select>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={onClose}>Nevermind</Button>
+          <Button type="submit" bsStyle="success">Send Invitation</Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  </div>
+);
 
 SendInvitationModal.propTypes = {
   show: PropTypes.bool,

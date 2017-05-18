@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
@@ -12,12 +13,15 @@ const userName = () => {
   return user ? `${name.first} ${name.last}` : '';
 };
 
-const AuthenticatedNavigation = () => (
+const AuthenticatedNavigation = ({ isAdminOrManager }) => (
   <div>
     <Nav>
       <LinkContainer to="/documents">
         <NavItem eventKey={ 2 } href="/documents">Documents</NavItem>
       </LinkContainer>
+      {isAdminOrManager ? <LinkContainer to="/users">
+        <NavItem eventKey={ 3 } href="/users">Users</NavItem>
+      </LinkContainer> : ''}
     </Nav>
     <Nav pullRight>
       <NavDropdown eventKey={ 3 } title={ userName() } id="basic-nav-dropdown">
@@ -26,5 +30,9 @@ const AuthenticatedNavigation = () => (
     </Nav>
   </div>
 );
+
+AuthenticatedNavigation.propTypes = {
+  isAdminOrManager: PropTypes.bool,
+};
 
 export default AuthenticatedNavigation;
