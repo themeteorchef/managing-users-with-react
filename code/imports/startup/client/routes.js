@@ -15,7 +15,6 @@ import Login from '../../ui/pages/Login.js';
 import NotFound from '../../ui/pages/NotFound.js';
 import RecoverPassword from '../../ui/pages/RecoverPassword.js';
 import ResetPassword from '../../ui/pages/ResetPassword.js';
-import Signup from '../../ui/pages/Signup.js';
 import AcceptInvitation from '../../ui/pages/AcceptInvitation.js';
 
 const authenticate = (nextState, replace) => {
